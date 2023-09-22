@@ -34,42 +34,48 @@ router.post("/addMovie", async(req,res)=>{
  })
 
 // delete a movie
-router.post("/deleteMovie/:id",async (req,res)=>{
-    const movieId=req.params.id;
-    console.log(movieId)
+router.delete("/deleteMovie/:id", async (req, res) => {
+    const movieId = req.params.id;
+  
     try {
-        const movie= await movieModel.findByIdAndDelete({_id:movieId})
-        res.status(200).json({message:"movie remoived successfully"});
-        console.log(movie);
-    } 
-    catch (error) {
-        console.log(error);
-        res.json({message:"something went wrong"});
-
+      const movie = await movieModel.findByIdAndDelete(movieId);
+  
+      if (movie) {
+        res.status(200).json({ message: "Movie removed successfully" });
+      } else {
+        res.status(404).json({ message: "Movie not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Something went wrong" });
     }
-   
- })
-//  update ticket rate and timing
-// router.post("/updateticket/:id",async (req,res)=>{
-//     const movieId=req.params.id;
-//     const newRate=req.body;
-//     console.log(newRate)
-    
-//     try {
-//         const movie= await movieModel.findOneAndUpdate(  { "_id" : "6503379c86d081bdb258638" },
-//    { $set: { "TicketRates" : "567" } }).exec()
-//    console.log("first")
-//         // movie.save();
-//         res.status(200).json({message:"rate updated"});
-        
-//     } 
-//     catch (error) {
-//         console.log(error);
-//         res.json({message:"something went wrong"});
+  });
+  
 
-//     }
-   
-//  })
+router.put("/updateMovie/:id", async (req, res) => {
+    const movieId = req.params.id;
+    const updatedMovieData = req.body; // This should contain the updated movie data
+  
+    try {
+      // Find the movie by its ID and update it
+      const updatedMovie = await movieModel.findByIdAndUpdate(
+        movieId,
+        updatedMovieData,
+        { new: true } // This option returns the updated document
+      );
+  
+      if (!updatedMovie) {
+        // If the movie with the given ID is not found, return a 404 response
+        return res.status(404).json({ message: "Movie not found" });
+      }
+  
+      // If the movie is successfully updated, return a success response
+      res.status(200).json({ message: "Movie updated successfully", movie: updatedMovie });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Something went wrong" });
+    }
+  });
 
 
 module.exports=router;

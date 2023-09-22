@@ -25,11 +25,11 @@ router.post("/admin", async (req,res)=>{
 
 // user  and admin login
 router.post("/login",async (req,res)=>{
-    const userName=req.body.userName;
+    const email=req.body.email;
     const password=req. body.password;
-    console.log(userName);
+    console.log(email);
     console.log(password);
-    const user= await userModel.findOne({userName:userName});
+    const user= await userModel.findOne({email:email});
     try {
         
         if(user){
@@ -49,8 +49,8 @@ router.post("/login",async (req,res)=>{
             }
         }
         else{
-            console.log(userName);
-            const admin= await adminModel.findOne({userName:userName});
+            console.log(email);
+            const admin= await adminModel.findOne({email:email});
             console.log(admin)
             if(admin){
                 try {
@@ -76,4 +76,32 @@ router.post("/login",async (req,res)=>{
     }
    
 })
- module.exports=router;
+
+router.post('/user', async (req, res) => {
+    try {
+        console.log(req.body);
+        let item = req.body;
+        console.log(req.body.email);
+        let email = req.body.email;
+        
+        // Ensure you await the findOne operation
+        let existingUser = await UserDATA.findOne({ email: email });
+
+        // Check if the existingUser is found
+        if (existingUser) {
+            res.json({ message: "User Already exists, Please try with another email Id" });
+        } else {
+            console.log('saved');
+            const user = new UserDATA(item); // Note: Ensure you use `new` to create a new instance
+            await user.save();  
+            res.json({ message: "Registered Successfully" });
+        }
+    } catch (error) {
+        console.error("Error in user registration:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
+module.exports = router
+

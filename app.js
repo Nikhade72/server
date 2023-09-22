@@ -18,9 +18,9 @@ PORT=process.env.PORT;
 
 mongoose.connect(URL)
 .then(()=>{
-    console.log("Connected to movie db");  
     app.listen(PORT,()=>{
        console.log("SERVER IS RUNNING IN THE PORT "+PORT);
+       console.log("Connected to atlas");
     })
 
 })
