@@ -8,7 +8,8 @@ movieSchema=mongoose.Schema({
     Description:"String",
     TicketRates:"Number",
     NoOfSeats:"Number",
-    timing:"String"
+    timing:"String",
+    Reviews:"String"
 
 })
 movieModel=mongoose.model("movie",movieSchema);
