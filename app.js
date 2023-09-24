@@ -12,6 +12,9 @@ const signup=require("./routes/signup");
 app.use("/api",signup)
 const admin=require("./routes/admin")
 app.use("/api",admin)
+const movie=require("./routes/movie")
+app.use("/api",movie)
+
 
 URL=process.env.URL;
 PORT=process.env.PORT;

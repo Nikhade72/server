@@ -77,5 +77,21 @@ router.put("/updateMovie/:id", async (req, res) => {
     }
   });
 
+  router.post("/viewMovie/:id",async (req,res)=>{
+    const movieId=req.params.id;
+    console.log(movieId)
+    try {
+        const movie= await movieModel.findOne({_id:movieId})
+        res.status(200).send(movie);
+        console.log(movie);
+    } 
+    catch (error) {
+        console.log(error);
+        res.json(error);
+
+    }
+   
+ })
+
 
 module.exports=router;

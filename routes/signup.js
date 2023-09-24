@@ -6,6 +6,8 @@ const adminModel=require("../model/adminModel");
 
  router.use(express.urlencoded({extended:false}));
  router.use(express.json());
+ const bcrypt = require('bcrypt');
+
 
 //  user signup
  router.post("/signup", async (req,res)=>{
