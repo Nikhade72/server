@@ -10,14 +10,13 @@ router.post("/addMovie", async(req,res)=>{
     const newMovie=req.body;
     console.log(newMovie)
     try {
-        console.log("first")
-        const addMovie=await movieModel(newMovie).save();
-        res.status(200).json({message:"movie added succesfully"})
-        
-    } catch (err) {
-       console.log(error) ;
-       res.json("error");
-    }
+      console.log("first")
+      const addMovie = await movieModel(newMovie).save();
+      res.status(200).json({ message: "movie added successfully" });
+  } catch (err) {
+    console.log(err); // Use 'err' instead of 'error'
+    res.json("error");
+  }
 })
 //view all movies
  router.post("/viewMovies",async (req,res)=>{
@@ -34,23 +33,40 @@ router.post("/addMovie", async(req,res)=>{
  })
 
 // delete a movie
+// router.delete("/deleteMovie/:id", async (req, res) => {
+//     const movieId = req.params.id;
+  
+//     try {
+//       const movie = await movieModel.findByIdAndDelete(movieId);
+  
+//       if (movie) {
+//         res.status(200).json({ message: "Movie removed successfully" });
+//       } else {
+//         res.status(404).json({ message: "Movie not found" });
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ message: "Something went wrong" });
+//     }
+//   });
+  // Express route to delete a movie by its ID
 router.delete("/deleteMovie/:id", async (req, res) => {
-    const movieId = req.params.id;
-  
-    try {
-      const movie = await movieModel.findByIdAndDelete(movieId);
-  
-      if (movie) {
-        res.status(200).json({ message: "Movie removed successfully" });
-      } else {
-        res.status(404).json({ message: "Movie not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Something went wrong" });
+  const movieId = req.params.id;
+
+  try {
+    const movie = await movieModel.findByIdAndDelete(movieId);
+
+    if (movie) {
+      res.status(200).json({ message: "Movie removed successfully" });
+    } else {
+      res.status(404).json({ message: "Movie not found" });
     }
-  });
-  
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
 
 router.put("/updateMovie/:id", async (req, res) => {
     const movieId = req.params.id;
