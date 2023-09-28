@@ -19,8 +19,25 @@ app.use("/api",admin)
 const movie=require("./routes/movie")
 app.use("/api",movie)
 
+const transporter = require('./routes/emailConfig');
+
+
 URL=process.env.URL;
 PORT=process.env.PORT;
+
+// Allow requests from a specific origin (e.g., your frontend URL during development)
+const allowedOrigins = ["http://localhost:3000"];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 mongoose.connect(URL,{
     useNewUrlParser: true,

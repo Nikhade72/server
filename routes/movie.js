@@ -66,17 +66,17 @@ router.post('/booktickets', async (req, res) => {
 });
 
 
-// router.post('/bookings', async (req, res) => {
-//     try {
-//         const { selectedMovie, selectedSeats, name, email } = req.body;
-//         const newBooking = new TicketBooking(bookingData);
-//       const savedBooking = await newBooking.save();
-//       res.json(savedBooking);
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: 'Internal Server Error' });
-//     }
-//   });
+router.post('/bookings', async (req, res) => {
+    try {
+        const { selectedMovie, selectedSeats, name, email } = req.body;
+        const newBooking = new TicketBooking(bookingData);
+      const savedBooking = await newBooking.save();
+      res.json(savedBooking);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 //  Booking Update
 router.post("/bookingupdate", async(req,res)=>{
