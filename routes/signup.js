@@ -26,6 +26,58 @@ router.post("/admin", async (req,res)=>{
  })
 
 // user  and admin login
+// router.post("/login",async (req,res)=>{
+//     const email=req.body.email;
+//     const password=req. body.password;
+//     console.log(email);
+//     console.log(password);
+//     const user= await userModel.findOne({email:email});
+//     try {
+        
+//         if(user){
+//              try {
+//                 console.log("first")
+//                 if(user.password==password){
+                
+//                    console.log(user)
+//                     res.json({message:"login successfull"});
+//                 }
+//                 else{
+//                     res.json({message:"login fails"});
+//                 }
+//             } 
+//             catch (error) {
+//             res.json("error");
+//             }
+//         }
+//         else{
+//             console.log(email);
+//             const admin= await adminModel.findOne({email:email});
+//             console.log(admin)
+//             if(admin){
+//                 try {
+//                     if(admin.password==password){
+//                          console.log(admin)
+//                          res.json({message:"admin successfull"});
+//                     }
+//                      else{
+//                         res.json({message:"password doesn't match"}); 
+//                     }
+//                 } 
+//                 catch (error) {
+//                     res.json("error");
+//                 }
+//            }
+//            else{
+//             res.json({message:"no such user found"}); 
+//            }
+//         }
+//     } 
+//     catch (error) {
+//         res.json({message:"no such user"});
+//     }
+   
+// })
 router.post("/login",async (req,res)=>{
     const email=req.body.email;
     const password=req. body.password;
@@ -36,11 +88,11 @@ router.post("/login",async (req,res)=>{
         
         if(user){
              try {
-                console.log("first")
+                console.log(user)
                 if(user.password==password){
                 
                    console.log(user)
-                    res.json({message:"login successfull"});
+                    res.json({message:"login successfull",data:user});
                 }
                 else{
                     res.json({message:"login fails"});
@@ -58,7 +110,7 @@ router.post("/login",async (req,res)=>{
                 try {
                     if(admin.password==password){
                          console.log(admin)
-                         res.json({message:"admin successfull"});
+                         res.json({message:"admin login  successfull"});
                     }
                      else{
                         res.json({message:"password doesn't match"}); 

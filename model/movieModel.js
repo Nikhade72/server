@@ -48,6 +48,7 @@ movieSchema=mongoose.Schema({
         type: Number,
         default: 0,
     },
+    userId: "String",
 })
 
 movieModel=mongoose.model("movie",movieSchema);

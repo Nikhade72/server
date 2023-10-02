@@ -32,82 +32,48 @@ router.post("/addMovie", async(req,res)=>{
    
  })
 
-// delete a movie
-// router.delete("/deleteMovie/:id", async (req, res) => {
-//     const movieId = req.params.id;
-  
-//     try {
-//       const movie = await movieModel.findByIdAndDelete(movieId);
-  
-//       if (movie) {
-//         res.status(200).json({ message: "Movie removed successfully" });
-//       } else {
-//         res.status(404).json({ message: "Movie not found" });
-//       }
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ message: "Something went wrong" });
-//     }
-//   });
+
   // Express route to delete a movie by its ID
-router.delete("/deleteMovie/:id", async (req, res) => {
-  const movieId = req.params.id;
-
-  try {
-    const movie = await movieModel.findByIdAndDelete(movieId);
-
-    if (movie) {
-      res.status(200).json({ message: "Movie removed successfully" });
-    } else {
-      res.status(404).json({ message: "Movie not found" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Something went wrong" });
-  }
-});
-
-
-router.put("/updateMovie/:id", async (req, res) => {
-    const movieId = req.params.id;
-    const updatedMovieData = req.body; // This should contain the updated movie data
-  
-    try {
-      // Find the movie by its ID and update it
-      const updatedMovie = await movieModel.findByIdAndUpdate(
-        movieId,
-        updatedMovieData,
-        { new: true } // This option returns the updated document
-      );
-  
-      if (!updatedMovie) {
-        // If the movie with the given ID is not found, return a 404 response
-        return res.status(404).json({ message: "Movie not found" });
-      }
-  
-      // If the movie is successfully updated, return a success response
-      res.status(200).json({ message: "Movie updated successfully", movie: updatedMovie });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Something went wrong" });
-    }
-  });
-
-  router.post("/viewMovie/:id",async (req,res)=>{
+  router.post("/deleteMovie/:id",async (req,res)=>{
     const movieId=req.params.id;
     console.log(movieId)
     try {
-        const movie= await movieModel.findOne({_id:movieId})
-        res.status(200).send(movie);
+        const movie= await movieModel.findByIdAndDelete({_id:movieId})
+        res.status(200).json({message:"movie removed successfully"});
         console.log(movie);
     } 
     catch (error) {
         console.log(error);
-        res.json(error);
+        res.json({message:"something went wrong"});
+    }  
+ }) 
 
+
+ router.post("/updateMovie/:id",async (req,res)=>{
+  const movieId=req.params.id;
+  console.log(movieId)
+  try {
+      const movie= await movieModel.findByIdAndUpdate({_id:movieId})
+      res.status(200).json({message:"movie update successfully"});
+      console.log(movie);
+  } 
+  catch (error) {
+      console.log(error);
+      res.json({message:"something went wrong"});
+  }  
+}) 
+
+  router.post("/viewMovie/:id", async(req,res)=>{
+    const movieId=req.params.id;
+    console.log(movieId)
+    try {
+        const movie =await movieModel.findOne({_id:movieId})
+        res.status(200).send(movie);
+        
+    } catch (err) {
+       console.log(err) ;
+       res.json("err");
     }
-   
- })
-
+})
 
 module.exports=router;
