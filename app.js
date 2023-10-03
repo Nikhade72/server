@@ -19,8 +19,8 @@ const admin=require("./routes/admin")
 app.use("/api",admin)
 const movie=require("./routes/movie")
 app.use("/api",movie)
-const email=require("./routes/email")
-
+const email = require('./routes/email'); 
+app.use('/api', email);
 URL=process.env.URL;
 PORT=process.env.PORT;
 
