@@ -4,6 +4,7 @@ const mongoose=require("mongoose");
 const morgan =require("morgan");
 const cors=require("cors");
 const bodyParser = require('body-parser');
+const availableDatesRouter = express.Router();
 
 require("dotenv").config();
 app.use(morgan("dev"));

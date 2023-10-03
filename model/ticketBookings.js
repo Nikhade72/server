@@ -8,11 +8,13 @@ const ticketBookingSchema = mongoose.Schema({
     name: String,
     email: String,
     seat_number: String,
-    // date:{
-    //     type:Date,
-    //     default: new Date(),
-    // },
-     
+    // date: Date, // Add date field
+    // seatIds: [String],
+    // showTime: String,
+    isCanceled: {
+        type: Boolean,
+        default: false, // By default, a booking is not canceled
+      },
     
 });
 

@@ -200,7 +200,7 @@ router.post("/seatupdate/:id", async(req,res)=>{
         $dec:{'SeatAvailable':1}    },{updeart:true}
       )
       
-      var post= await movieModel.updateOne({_id:id},{ $inc: {'SeatAvailable': -1 }}).exec();
+      var post= await ticketBookingModel.updateOne({_id:id},{ $inc: {'SeatAvailable': -1 }}).exec();
       const newseat=post.SeatAvailable;
       var updatedseat=newseat-1;
      res.json({message:"seats updated",updatedseat});
@@ -214,14 +214,13 @@ router.post("/seatupdate/:id", async(req,res)=>{
 
 })
 
-// get all movies booked by a perticular user
+// get all movies by one user
 router.post('/getbookedtkts/:id', async(req,res)=>{
   const userId=req.params.id;
   console.log(userId)
   try {
       let movies= await ticketBookingModel.find({"userId":userId}).sort({date:-1}).exec()
       console.log(movies);
-      
       res.json(movies);
       }
       
@@ -231,20 +230,7 @@ router.post('/getbookedtkts/:id', async(req,res)=>{
   }
   
 })
-// router.get('/bookingdetails/:bookingId',async(req,res)=>{
-//   try {
-//     const { bookingId } = req.params; // Correctly destructure 'bookingId'
-//     console.log(bookingId);
-//     const bookingDetails = await ticketBookingModel.findById(bookingId);
-//     if (!bookingDetails) {
-//       return res.status(404).json({ message: 'No Booking Details' });
-//     }
-//     res.json({ bookingDetails });
-//   } catch (error) {
-//     console.error('Error fetching booking details:', error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// })
+
 
 router.get('/bookingdetails/:bookingId', async (req, res) => {
   try {
@@ -261,9 +247,6 @@ router.get('/bookingdetails/:bookingId', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
-
 
 
 module.exports=router;
