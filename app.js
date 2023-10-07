@@ -1,10 +1,10 @@
-const express = require ("express");
+const express = require("express");
 const app= new express();
 const mongoose=require("mongoose");
 const morgan =require("morgan");
 const cors=require("cors");
 const bodyParser = require('body-parser');
-const availableDatesRouter = express.Router();
+const jwt = require('jsonwebtoken');
 
 require("dotenv").config();
 app.use(morgan("dev"));

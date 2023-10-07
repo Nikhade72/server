@@ -8,6 +8,11 @@ const ticketBookingSchema = mongoose.Schema({
     name: String,
     email: String,
     seat_number: String,
+    ticketsSoldPerDay: {
+      date: Date,
+      seatNumber: Number,
+      isSold: Boolean,
+  },
     // date: Date, // Add date field
     // seatIds: [String],
     // showTime: String,
@@ -15,8 +20,9 @@ const ticketBookingSchema = mongoose.Schema({
         type: Boolean,
         default: false, // By default, a booking is not canceled
       },
-    
+     
 });
+
 
 const ticketBookingModel = mongoose.model("ticketBooking", ticketBookingSchema);
 

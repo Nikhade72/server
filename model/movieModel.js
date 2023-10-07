@@ -10,7 +10,7 @@ movieSchema=mongoose.Schema({
     },
     Category: {
         type: String,
-        enum: ['UA', 'A', 'PG'], // Define allowed categories
+        enum: ['UA', 'A', 'PG', ], // Define allowed categories
         required: true,
     },
     Languages: {
@@ -34,12 +34,14 @@ movieSchema=mongoose.Schema({
         type: Number,
         required: true,
     },
-    Reviews: {
-        type: Number,
-        default: 0, // Provide a default value here
-        required: true,
-    },
-    
+    reviews: [
+        {
+          reviewText: String,
+          rating: Number,
+        },
+      ],
+      //_id: String,
+      title: String,
     averageRating: {
         type: Number,
         default: 0,
@@ -49,6 +51,9 @@ movieSchema=mongoose.Schema({
         default: 0,
     },
     userId: "String",
+    Timing: {
+        timing: String,
+      },
 })
 
 movieModel=mongoose.model("movie",movieSchema);
