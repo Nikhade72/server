@@ -19,8 +19,18 @@ const admin=require("./routes/admin")
 app.use("/api",admin)
 const movie=require("./routes/movie")
 app.use("/api",movie)
+<<<<<<< Updated upstream
 const email = require('./routes/email'); 
 app.use('/api', email);
+=======
+
+const path = require('path');
+app.use(express.static(path.join(__dirname,'/build'))); 
+app.get(`/*`,function (req,res){
+    res.sendFile(path.join(__dirname,'/build/index.html'));
+})
+
+>>>>>>> Stashed changes
 URL=process.env.URL;
 PORT=process.env.PORT;
 

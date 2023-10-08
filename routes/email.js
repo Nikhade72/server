@@ -11,7 +11,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+<<<<<<< Updated upstream
 router.post('/sendEmail', (req, res) => {
+=======
+router.post('/api/sendEmail', (req, res) => {
+>>>>>>> Stashed changes
   const { email, bookingId, seatNumbers  } = req.body;
 
   // Compose the email

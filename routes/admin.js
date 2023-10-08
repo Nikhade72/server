@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken"); // Import the jsonwebtoken library
 
 
 const movieModel=require ("../model/movieModel");
+<<<<<<< Updated upstream
 //add movie
 // router.post("/addMovie", async(req,res)=>{
 //     const newMovie=req.body;
@@ -39,6 +40,12 @@ function authenticateToken(req, res, next) {
     const token = authorizationHeader.replace('Bearer ', '');
   
     // Verify the token
+=======
+// add movie
+router.post("/api/addMovie", async(req,res)=>{
+    const newMovie=req.body;
+    console.log(newMovie)
+>>>>>>> Stashed changes
     try {
       const decoded = jwt.verify(token, 'Harsha');
       // You can also extract user information from the decoded token if needed
@@ -71,7 +78,7 @@ function authenticateToken(req, res, next) {
 
   
 //view all movies
- router.post("/viewMovies",async (req,res)=>{
+ router.post("/api/viewMovies",async (req,res)=>{
     const input=req.body;
     try {
         const movies= await movieModel.find()
@@ -86,7 +93,11 @@ function authenticateToken(req, res, next) {
 
 
   // Express route to delete a movie by its ID
+<<<<<<< Updated upstream
   router.post("/deleteMovie/:id",async (req,res)=>{
+=======
+  router.post("/api/deleteMovie/:id",async (req,res)=>{
+>>>>>>> Stashed changes
     const movieId=req.params.id;
     console.log(movieId)
     try {
@@ -101,7 +112,11 @@ function authenticateToken(req, res, next) {
  }) 
 
 
+<<<<<<< Updated upstream
  router.post("/updateMovie/:id",async (req,res)=>{
+=======
+ router.post("/api/updateMovie/:id",async (req,res)=>{
+>>>>>>> Stashed changes
   const movieId=req.params.id;
   console.log(movieId)
   try {
@@ -115,7 +130,11 @@ function authenticateToken(req, res, next) {
   }  
 }) 
 
+<<<<<<< Updated upstream
   router.post("/viewMovie/:id", async(req,res)=>{
+=======
+  router.post("/api/viewMovie/:id", async(req,res)=>{
+>>>>>>> Stashed changes
     const movieId=req.params.id;
     console.log(movieId)
     try {

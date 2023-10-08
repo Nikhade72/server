@@ -51,9 +51,12 @@ movieSchema=mongoose.Schema({
         default: 0,
     },
     userId: "String",
+<<<<<<< Updated upstream
     Timing: {
         timing: String,
       },
+=======
+>>>>>>> Stashed changes
 })
 
 movieModel=mongoose.model("movie",movieSchema);

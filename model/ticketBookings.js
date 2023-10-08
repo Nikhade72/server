@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const ticketBookingSchema = mongoose.Schema({
+<<<<<<< Updated upstream
     userId: String,
     movieId: String,
     movieName: String,
@@ -22,6 +23,28 @@ const ticketBookingSchema = mongoose.Schema({
       },
 });
 
+=======
+    // userId: String,
+    // movieId: String,
+    // movieName: String,
+    // NoOfSeats: Number,
+    // name: String,
+    // email: String,
+    // title: String,
+    // seatIds: [String], 
+     
+
+   userId: "String",
+    movieId: "String",
+    movieName:"String",
+    date:{
+        type:Date,
+        default: new Date(),
+    },
+    seat_number: String,
+
+});
+>>>>>>> Stashed changes
 
 const ticketBookingModel = mongoose.model("ticketBooking", ticketBookingSchema);
 

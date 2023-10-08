@@ -8,7 +8,7 @@ router.use(express.json());
 const jwt = require('jsonwebtoken');
 
 // Get movies
-router.post('/getbookedtkts/:id', async(req,res)=>{
+router.post('/api/getbookedtkts/:id', async(req,res)=>{
     const userId=req.params.id;
     console.log(userId)
     try {
@@ -25,7 +25,11 @@ router.post('/getbookedtkts/:id', async(req,res)=>{
     
 })
 
+<<<<<<< Updated upstream
 router.post("/bookingupdate", async(req,res)=>{
+=======
+router.post("/api/bookingupdate", async(req,res)=>{
+>>>>>>> Stashed changes
   const id= req.body._id;
   var query={_id:id};
   try {
@@ -44,6 +48,7 @@ router.post("/bookingupdate", async(req,res)=>{
 })
 
 
+<<<<<<< Updated upstream
 
 //book ticket
 router.post('/booktickets', async (req, res) => {
@@ -53,6 +58,16 @@ router.post('/booktickets', async (req, res) => {
   try {
     // Check if the seat is already booked for the selected movie and user
     const existingBooking = await ticketBookingModel.findOne({ movieId, seat_number, userId });
+=======
+//booking tikets 
+router.post('/api/booktickets', async (req, res) => {
+  const bookingData = req.body;
+  const { seat_number, movieId, UserId} = bookingData;
+
+  try {
+      // Check if the seat is already booked for the selected movie
+      const existingBooking = await ticketBookingModel.findOne({ movieId, seat_number, UserId });
+>>>>>>> Stashed changes
 
     if (existingBooking) {
       // Seat is already booked, return an error response
@@ -71,9 +86,16 @@ router.post('/booktickets', async (req, res) => {
 });
 
 
+<<<<<<< Updated upstream
 
 // Cancel tickets
 router.post('/cancelticket/:id', async(req,res)=>{
+=======
+
+
+// Cancel tickets
+router.post('/api/cancelticket/:id', async(req,res)=>{
+>>>>>>> Stashed changes
   const tktId=req.params.id;
   console.log(tktId)
   try {
@@ -82,13 +104,17 @@ router.post('/cancelticket/:id', async(req,res)=>{
       
       res.json({message:"Ticket Cancelled"});
       }
+<<<<<<< Updated upstream
+=======
+      
+>>>>>>> Stashed changes
    catch (error) {
       console.log(error) ;
       res.json("error");
   }    
 })
 
-router.post('/available', async (req, res) => {
+router.post('/api/available', async (req, res) => {
     try {
       const movies = await ticketBookingModel.find({ availableSeats: { $gt: 0 } }); // Fetch movies with available seats
       res.json(movies);
@@ -98,7 +124,7 @@ router.post('/available', async (req, res) => {
     }
   });
 
-  router.post('/availability/:movieId', async (req, res) => {
+  router.post('/api/availability/:movieId', async (req, res) => {
     try {
       const movieId = req.params.movieId;
   
@@ -169,7 +195,11 @@ router.post('/api/reserve-seat', async (req, res) => {
   }
 });
 
+<<<<<<< Updated upstream
 router.post('/getbookedtkts/:userId', async (req, res) => {
+=======
+router.get('/api/getbookedtkts/:userId', async (req, res) => {
+>>>>>>> Stashed changes
   const userId = req.params.userId;
 
   try {
@@ -184,8 +214,13 @@ router.post('/getbookedtkts/:userId', async (req, res) => {
   }
 });
 
+<<<<<<< Updated upstream
 
 router.post("/seatupdate/:id", async(req,res)=>{
+=======
+// save booked SEATS in db
+router.post("/api/seatupdate/:id", async(req,res)=>{
+>>>>>>> Stashed changes
   const id=req.params.id;
   console.log(id)
   const data=req.body.name;
@@ -193,15 +228,26 @@ router.post("/seatupdate/:id", async(req,res)=>{
   const datas={ "seats.seatnumber":"1","seats.disabledd":true}
  
   var query={_id:id};
+<<<<<<< Updated upstream
   try {
 
        const pot=await ticketBookingModel.updateOne(
+=======
+  // console.log(query);
+  try {
+
+       const pot=await movieModel.updateOne(
+>>>>>>> Stashed changes
       {_id:id,"seats.seatnumber": data },
       { $set: {'seats.$.disStatus': true },
         $dec:{'SeatAvailable':1}    },{updeart:true}
       )
       
+<<<<<<< Updated upstream
       var post= await ticketBookingModel.updateOne({_id:id},{ $inc: {'SeatAvailable': -1 }}).exec();
+=======
+      var post= await movieModel.updateOne({_id:id},{ $inc: {'SeatAvailable': -1 }}).exec();
+>>>>>>> Stashed changes
       const newseat=post.SeatAvailable;
       var updatedseat=newseat-1;
      res.json({message:"seats updated",updatedseat});
@@ -214,6 +260,7 @@ router.post("/seatupdate/:id", async(req,res)=>{
   }
 
 })
+<<<<<<< Updated upstream
 
 // get all movies by one user
 router.post('/getbookedtkts/:id', async(req,res)=>{
@@ -222,6 +269,17 @@ router.post('/getbookedtkts/:id', async(req,res)=>{
   try {
       let movies= await ticketBookingModel.find({"userId":userId}).sort({date:-1}).exec()
       console.log(movies);
+=======
+// GET ALL TICKETS BOOKED on a perticular date
+router.post('/api/todaysBooking/:id', async(req,res)=>{
+  const date=req.params.id;
+  console.log(date)
+  try {
+      // let movies= await ticketBookingModel.find({$expr:{$eq:[{ $month:"$date"},9][]}}).exec()
+      // {currentDate<new Date
+      console.log(movies);
+      
+>>>>>>> Stashed changes
       res.json(movies);
       }
       
@@ -229,6 +287,61 @@ router.post('/getbookedtkts/:id', async(req,res)=>{
       console.log(error) ;
       res.json("error");
   }
+<<<<<<< Updated upstream
+=======
+})    
+// get all movies booked by a perticular user
+router.post('/api/getbookedtkts/:id', async(req,res)=>{
+  const userId=req.params.id;
+  console.log(userId)
+  try {
+      let movies= await ticketBookingModel.find({"userId":userId}).sort({date:-1}).exec()
+      console.log(movies);
+      
+      res.json(movies);
+      }
+      
+   catch (error) {
+      console.log(error) ;
+      res.json("error");
+  }
+  
+})
+router.get('/api/bookingdetails/:bookingId',async(req,res)=>{
+  try {
+    const { bookingId } = req.params; // Correctly destructure 'bookingId'
+    console.log(bookingId);
+    const bookingDetails = await ticketBookingModel.findById(bookingId);
+    if (!bookingDetails) {
+      return res.status(404).json({ message: 'No Booking Details' });
+    }
+    res.json({ bookingDetails });
+  } catch (error) {
+    console.error('Error fetching booking details:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+router.get('/api/bookingdetails/:bookingId', async (req, res) => {
+  try {
+    const bookingId = req.params.bookingId;
+    const bookingDetails = await ticketBookingModel.findById(bookingId);
+
+    if (!bookingDetails) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    res.json({ bookingDetails });
+  } catch (error) {
+    console.error('Error fetching booking details:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
+
+>>>>>>> Stashed changes
   
 })
 
