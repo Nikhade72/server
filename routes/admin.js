@@ -8,49 +8,67 @@ const jwt = require("jsonwebtoken"); // Import the jsonwebtoken library
 
 const movieModel=require ("../model/movieModel");
 //add movie
-router.post("/addMovie", async(req,res)=>{
-    const newMovie=req.body;
-    console.log(newMovie)
-    try {
-      console.log("first")
-      const addMovie = await movieModel(newMovie).save();
-      res.status(200).json({ message: "movie added successfully" });
-  } catch (err) {
-    console.log(err); // Use 'err' instead of 'error'
-    res.json("error");
-  }
-})
-
-// const verifyToken = (req, res, next) => {
-//     const token = req.headers.authorization; // Assuming you send the token in the 'Authorization' header
-  
-//     if (!token) {
-//       return res.status(401).json({ message: "Unauthorized" });
-//     }
-  
-//     jwt.verify(token, "Harsha", (err, decoded) => {
-//       if (err) {
-//         return res.status(401).json({ message: "Token is not valid" });
-//       }
-//       req.user = decoded;
-//       next();
-//     });
-//   };
-  
-//   // Protected route with JWT authentication
-//   router.post("/addMovie", verifyToken, async (req, res) => {
-//     const newMovie = req.body;
-//     console.log(newMovie);
-  
+// router.post("/addMovie", async(req,res)=>{
+//     const newMovie=req.body;
+//     console.log(newMovie)
 //     try {
-//       console.log("first");
+//       console.log("first")
 //       const addMovie = await movieModel(newMovie).save();
-//       res.status(200).json({ message: "Movie added successfully" });
-//     } catch (err) {
-//       console.log(err);
-//       res.status(500).json({ message: "Internal Server Error" });
-//     }
-//   });
+//       res.status(200).json({ message: "movie added successfully" });
+//   } catch (err) {
+//     console.log(err); // Use 'err' instead of 'error'
+//     res.json("error");
+//   }
+// })
+
+
+
+
+// jwt add movie
+
+function authenticateToken(req, res, next) {
+    // Get the JWT token from the request headers
+    const authorizationHeader = req.headers.authorization;
+  
+    // If no token is provided, return a 401 Unauthorized response
+    if (!authorizationHeader) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+  
+    // Extract the token from the Authorization header
+    const token = authorizationHeader.replace('Bearer ', '');
+  
+    // Verify the token
+    try {
+      const decoded = jwt.verify(token, 'Harsha');
+      // You can also extract user information from the decoded token if needed
+      req.user = decoded;
+      next();
+    } catch (error) {
+      return res.status(403).json({ message: 'Invalid token.' });
+    }
+  }
+  
+  
+  
+  // Your route definition remains the same
+  router.post('/addMovie', authenticateToken, async (req, res) => {
+    const newMovie = req.body;
+    console.log(newMovie);
+    try {
+      console.log('first');
+      const addMovie = await movieModel(newMovie).save();
+      res.status(200).json({ message: 'movie added successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+
+
+
+
   
 //view all movies
  router.post("/viewMovies",async (req,res)=>{

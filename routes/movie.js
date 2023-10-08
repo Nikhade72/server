@@ -5,6 +5,7 @@ const ticketBookingModel=require("../model/ticketBookings");
 
 router.use(express.urlencoded({extended:false}));
 router.use(express.json());
+const jwt = require('jsonwebtoken');
 
 // Get movies
 router.post('/getbookedtkts/:id', async(req,res)=>{
@@ -43,30 +44,8 @@ router.post("/bookingupdate", async(req,res)=>{
 })
 
 
-//booking tikets 
-// router.post('/booktickets', async (req, res) => {
-//   const bookingData = req.body;
-//   const { seat_number, movieId, UserId} = bookingData;
 
-//   try {
-//       // Check if the seat is already booked for the selected movie
-//       const existingBooking = await ticketBookingModel.findOne({ movieId, seat_number, UserId });
-
-//       if (existingBooking) {
-//           // Seat is already booked, return an error response
-//           return res.status(500).json({ error: 'Seat not available. Please choose another seat.' });
-//       }
-
-//       // Seat is available, proceed with booking
-//       const booking = await ticketBookingModel(bookingData).save();
-//       console.log(booking);
-//       res.json(booking);
-//   } catch (error) {
-//       console.log(error);
-//       res.status(700).json("error");
-//   }
-// });
-
+//book ticket
 router.post('/booktickets', async (req, res) => {
   const bookingData = req.body;
   const { seat_number, movieId, userId } = bookingData; // Rename UserId to userId to match the variable name
@@ -90,8 +69,6 @@ router.post('/booktickets', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while booking seats.' });
   }
 });
-
-
 
 
 
@@ -299,39 +276,39 @@ router.post("/updateMovie/:id", async (req, res) => {
 
 // POST /api/movie/submitreview
 // Define route for submitting a review
-router.post('/submitreview', async (req, res) => {
-  try {
-    const { movieId, reviewText, rating } = req.body;
+// router.post('/submitreview', async (req, res) => {
+//   try {
+//     const { movieId, reviewText, rating } = req.body;
 
-    // Find the movie by its ID
-    const movie = await movieModel.findById(movieId);
+//     // Find the movie by its ID
+//     const movie = await movieModel.findById(movieId);
 
-    if (!movie) {
-      return res.status(404).json({ error: 'Movie not found' });
-    }
+//     if (!movie) {
+//       return res.status(404).json({ error: 'Movie not found' });
+//     }
 
-    // Create a new review for the movie
-    const newReview = {
-      reviewText,
-      rating,
-    };
+//     // Create a new review for the movie
+//     const newReview = {
+//       reviewText,
+//       rating,
+//     };
 
-    // Add the review to the movie's reviews array (assuming you have a reviews array in the movie schema)
-    movie.reviews.push(newReview);
+//     // Add the review to the movie's reviews array (assuming you have a reviews array in the movie schema)
+//     movie.reviews.push(newReview);
 
-    // Calculate the new average rating for the movie
-    const totalRatings = movie.reviews.reduce((total, review) => total + review.rating, 0);
-    movie.averageRating = totalRatings / movie.reviews.length;
+//     // Calculate the new average rating for the movie
+//     const totalRatings = movie.reviews.reduce((total, review) => total + review.rating, 0);
+//     movie.averageRating = totalRatings / movie.reviews.length;
 
-    // Save the updated movie document
-    await movie.save();
+//     // Save the updated movie document
+//     await movie.save();
 
-    res.status(200).json({ message: 'Review submitted successfully' });
-  } catch (error) {
-    console.error('Error submitting review:', error);
-    res.status(500).json({ error: 'An error occurred while submitting the review' });
-  }
-});
+//     res.status(200).json({ message: 'Review submitted successfully' });
+//   } catch (error) {
+//     console.error('Error submitting review:', error);
+//     res.status(500).json({ error: 'An error occurred while submitting the review' });
+//   }
+// });
 
 
 router.get('/api/movies/:id/averageRating', async (req, res) => {
@@ -376,39 +353,124 @@ router.get('/bookingdetails/:movieId/:date', async (req, res) => {
   }
 });
 
+// router.post('/submitreview', async (req, res) => {
+//   try {
+//     const { movieId, reviewText, rating } = req.body;
+//     // Find the movie by its ID
+//     const movie = await movieModel.findById(movieId);
+
+//     if (!movie) {
+//       return res.status(404).json({ error: 'Movie not found' });
+//     }
+
+//     // Create a new review for the movie
+//     const newReview = {
+//       reviewText,
+//       rating,
+//     };
+
+//     // Add the review to the movie's reviews array (assuming you have a reviews array in the movie schema)
+//     movie.reviews.push(newReview);
+
+//     // Calculate the new average rating for the movie
+//     const totalRatings = movie.reviews.reduce((total, review) => total + review.rating, 0);
+//     movie.averageRating = totalRatings / movie.reviews.length;
+
+//     // Save the updated movie document
+//     await movie.save();
+
+//     res.status(200).json({ message: 'Review submitted successfully' });
+//   } catch (error) {
+//     console.error('Error submitting review:', error);
+//     res.status(500).json({ error: 'An error occurred while submitting the review' });
+//   }
+// });
 router.post('/submitreview', async (req, res) => {
   try {
     const { movieId, reviewText, rating } = req.body;
-    // Find the movie by its ID
-    const movie = await movieModel.findById(movieId);
 
-    if (!movie) {
-      return res.status(404).json({ error: 'Movie not found' });
+    // Check if the movieId, reviewText, and rating are provided
+    if (!movieId || !reviewText || !rating) {
+      return res.status(400).json({ message: 'Please provide movieId, reviewText, and rating' });
     }
 
-    // Create a new review for the movie
-    const newReview = {
+    // Create a new review
+    const newReview = new reviewData({
+      movieId,
       reviewText,
       rating,
-    };
+    });
 
-    // Add the review to the movie's reviews array (assuming you have a reviews array in the movie schema)
-    movie.reviews.push(newReview);
-
-    // Calculate the new average rating for the movie
-    const totalRatings = movie.reviews.reduce((total, review) => total + review.rating, 0);
-    movie.averageRating = totalRatings / movie.reviews.length;
-
-    // Save the updated movie document
-    await movie.save();
-
-    res.status(200).json({ message: 'Review submitted successfully' });
+    const savedReview = await newReview.save();
+    return res.status(201).json({ message: 'Review submitted successfully', review: savedReview });
   } catch (error) {
     console.error('Error submitting review:', error);
-    res.status(500).json({ error: 'An error occurred while submitting the review' });
-  }
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Retrieve reviews for a specific movie
+router.get('/reviews/:movieId', async (req, res) => {
+  try {
+    const movieId = req.params.movieId;
+    const reviews = await reviewData.find({ movieId });
+
+    if (!reviews) {
+      return res.status(404).json({ message: 'No reviews found for this movie' });
+    }
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error('Error retrieving reviews:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 
+// ...
+
+// const { isValid, parseISO } = require('date-fns'); // Import date-fns for date validation
+
+// router.get('/soldticketsperday', async (req, res) => {
+//   console.log('Query Parameters:', req.query);
+
+//   try {
+//     // Extract query parameters from the URL
+//     const { startDate, endDate } = req.query;
+//     console.log('Query Parameters:', req.query);
+
+//     // Client-side date format validation
+//     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+//     const isValidStartDate = dateRegex.test(startDate);
+//     const isValidEndDate = dateRegex.test(endDate);
+
+//     if (!isValidStartDate || !isValidEndDate) {
+//       return res.status(400).json({ message: 'Invalid date format' });
+//     }
+
+//     // Server-side date parsing and validation
+//     const parsedStartDate = parseISO(startDate);
+//     const parsedEndDate = parseISO(endDate);
+
+//     if (!isValid(parsedStartDate) || !isValid(parsedEndDate)) {
+//       return res.status(400).json({ message: 'Invalid date value' });
+//     }
+
+//     // Perform a query to retrieve ticket sales data within the specified date range
+//     const ticketSalesData = await ticketBookingModel.find({
+//       'ticketsSoldPerDay.date': {
+//         $gte: parsedStartDate, // Greater than or equal to startDate
+//         $lte: parsedEndDate,   // Less than or equal to endDate
+//       },
+//     });
+//     console.log('Query Results:', ticketSalesData);
+
+//     // Send the ticket sales data as a JSON response
+//     res.status(200).json(ticketSalesData);
+//   } catch (error) {
+//     console.error('Error fetching ticket sales data:', error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 module.exports=router;
